@@ -1,0 +1,83 @@
+spring:
+  application:
+    name: test-project
+  cloud:
+    nacos:
+      discovery:
+        #支持集群（多地址配置）
+        server-addr: 127.0.0.1:8848,127.0.0.1:8848
+      config:
+        #支持集群（多地址配置）
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+  #TODO: 测试环境以及生产环境中， DB、redis等含账密信息的存储或中间件建议放入配置中心保存
+  datasource:
+    db-name: test_template
+    username: template_user
+    password: templateUse2@#
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.db-name}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+    hikari:
+      minimum-idle: 8
+      maximum-pool-size: 30
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: ${spring.datasource.db-name}-POOL
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+redis:
+  standalone-host: 127.0.0.1
+  standalone-port: 6379
+  password: foobared
+  database: 1
+  test-on-borrow: true
+  max-total: 400
+
+server:
+  port: 18888
+  tomcat:
+    max-connections: 1000
+    accept-count: 500
+    max-threads: 1000
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maximumSize: 1000
+      allowMaximumSizeToDivergeFromCoreSize: true
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+            strategy: 'THREAD'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info
+
+feign:
+  httpclient:
+    connection-timeout: 100000
+    max-connections: 3000
+    max-connections-per-route: 1200
+  hystrix:
+    enabled: true
+
+
+biz-logging:
+  path: ./logs
+  logLevel: debug
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configurationProperties:
+    default-statement-timeout: 60
+  configuration:
+    defaultStatementTimeout: 100
