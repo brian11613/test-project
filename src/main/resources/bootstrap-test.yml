@@ -5,10 +5,10 @@ spring:
     nacos:
       discovery:
         #支持集群（多地址配置）
-        server-addr: 127.0.0.1:8848,127.0.0.1:8848
+        server-addr: 10.211.55.2:8848
       config:
         #支持集群（多地址配置）
-        server-addr: 127.0.0.1:8848
+        server-addr: 10.211.55.2:8848
         file-extension: yml
   #TODO: 测试环境以及生产环境中， DB、redis等含账密信息的存储或中间件建议放入配置中心保存
   datasource:
